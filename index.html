@@ -1,0 +1,315 @@
+<!DOCTYPE HTML>
+
+<html>
+	<head>
+		<title>Alexis LBH</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="assets/css/main.css" />
+		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
+	</head>
+	<body class="is-preload">
+
+		<!-- Sidebar -->
+			<section id="sidebar">
+				<div class="inner">
+					<nav>
+						<ul>
+							<li><a href="#intro">Welcome</a></li>
+							<li><a href="#one">SQL project</a></li>
+							<li><a href="#two">Machine Learning project</a></li>
+							<li><a href="#three">Yoga&amp;Me project</a></li>
+						</ul>
+					</nav>
+				</div>
+			</section>
+
+		<!-- Wrapper -->
+			<div id="wrapper">
+
+				<!-- Intro -->
+					<section id="intro" class="wrapper style1 fade-up">
+						<div class="inner">
+							<ul class="menu">
+								<li><h1>Alexis LBH - Data'cheminant</h1></li>
+								<li><a target="_blank" rel="noopener noreferrer" href="https://github.com/alexislbh" class="icon brands fa-github"><span class="label">GitHub</span></a></li>
+								<li><a target="_blank" rel="noopener noreferrer" href="https://www.linkedin.com/in/alexislbh/" class="icon brands fa-linkedin-in"><span class="label">LinkedIn</span></a>
+							</ul>
+							<p>Just another presentation site to showcase my projects.<br />
+							Currently training as a data analyst at the Wild Code School of Bordeaux, this site aims to show my knowledge.</p>
+							<h2>Hard skills</h2>
+							<div class="features">
+								<section>
+									<span class="icon solid major fa-desktop"></span>
+									<h3>Spreadsheets, SQL databases and algorithmic :</h3>
+									<ul class="alt">
+										<li>Excel</li>
+										<li>SQL</li>
+										<li>Python</li>
+										<li>Data Visualization</li>
+										<li>Algorithmic</li>
+									</ul>
+								</section>
+								<section>	
+									<span class="icon solid major fa-code"></span>
+									<h3>Data processing with Python :</h3>
+									<ul class="alt">
+										<li>NumPy</li>
+										<li>Pandas</li>
+										<li>MatPlotLib</li>
+										<li>Seaborn</li>
+										<li>Plotly</li>
+									</ul>
+								</section>
+								<section>
+									<span class="icon solid major fa-cog"></span>
+									<h3>Machine Learning :</h3>
+									<ul class="alt">
+										<li>Scikit-learn</li>
+										<li>Regression</li>
+										<li>Classification</li>
+										<li>Clustering</li>
+										<li>NLP</li>
+									</ul>
+								</section>
+								<section>
+									<span class="icon solid major fa-link"></span>
+									<h3>Business Intelligence and data sources :</h3>
+									<ul class="alt">
+										<li>Git</li>
+										<li>WebScraping</li>
+										<li>REST-API</li>
+									</ul>
+								</section>
+							</div>
+						</div>
+					</section>
+
+				<!-- One -->
+					<section id="one" class="wrapper style2 spotlights">
+						<section class="sql">
+							<a class="image"><img src="images/toys&cie_dashboard.png" alt="" data-position="center center" /></a>
+							<div class="content">
+								<div class="inner">
+									<h2>Toys & Cie</h2>
+									<p>Your dashboard should revolve around these 4 main topics: sales, finance, logistics, and human resources.<br />
+									<ul>
+										<li>Sales: The number of products sold by category and by month, with comparison and rate of change compared to the same month of the previous year.</li>
+										<li>Finances: The turnover of the orders of the last two months by country and the orders that have not yet been paid.</li>
+										<li>Logistics: The stock of the 5 most ordered products.</li>
+										<li>Human Resources: Each month, the 2 sellers with the highest turnover.</li>
+									</ul>
+									You can download the database on <a href="https://www.mysqltutorial.org/wp-content/uploads/2018/03/mysqlsampledatabase.zip">MySQL Sample Database</a></p>
+								</div>
+							</div>
+						</section>
+												<section class="sql">
+							<div class="content">
+								<div class="inner">
+									<div class="tab">
+										<button class="tablinks" onclick="openTab(event, 'Sale')" id="defaultOpen">Sale</button>
+										<button class="tablinks" onclick="openTab(event, 'Human Ressources')">Human Ressources</button>
+									</div>
+
+									<!-- Tab content -->
+									<div id="Sale" class="tabcontent">
+										<pre><code>
+SELECT 
+  DATE_FORMAT(orders.orderdate, '%M') AS Months,
+  products.productline AS Category,
+  SUM(CASE WHEN YEAR(orders.orderdate) = YEAR(CURDATE()) THEN quantityOrdered END) AS '2022',
+  SUM(CASE WHEN YEAR(orders.orderdate) = YEAR(CURDATE()) - 1 THEN quantityOrdered END) AS '2021',
+  SUM(CASE WHEN YEAR(orders.orderdate) = YEAR(CURDATE()) - 2 THEN quantityOrdered END) AS '2020',
+  ROUND(((SUM(CASE WHEN YEAR(orders.orderdate) = YEAR(CURDATE()) THEN quantityOrdered END) 
+    - SUM(CASE WHEN YEAR(orders.orderdate) = YEAR(CURDATE()) - 1 THEN quantityOrdered END))
+    / SUM(CASE WHEN YEAR(orders.orderdate) = YEAR(CURDATE()) - 1 THEN quantityOrdered END)) * 100, 2) AS '2022 / 2021',
+  ROUND(((SUM(CASE WHEN YEAR(orders.orderdate) = YEAR(CURDATE()) - 1 THEN quantityOrdered END)
+    - SUM(CASE WHEN YEAR(orders.orderdate) = YEAR(CURDATE()) - 2 THEN quantityOrdered END))
+    / SUM(CASE WHEN YEAR(orders.orderdate) = YEAR(CURDATE()) - 2 THEN quantityOrdered END)) * 100, 2) AS '2021 / 2020'
+FROM
+  toys_and_models.orderdetails
+    INNER JOIN
+  products ON products.productcode = orderdetails.productcode
+    INNER JOIN
+  orders ON orders.ordernumber = orderdetails.ordernumber
+GROUP BY MONTH(orders.orderdate) , Category;
+										</code></pre>
+									</div>
+									<div id="Human Ressources" class="tabcontent">
+										<pre><code>
+WITH table1 AS(
+  SELECT orderNumber, SUM(quantityOrdered*priceEach) AS CA
+  FROM orderdetails
+  GROUP BY orderNumber),
+  table2 AS (
+    SELECT orderNumber,orderDate,customerNumber
+    FROM orders
+    GROUP BY orderNumber)
+SELECT table1.orderNumber,CONCAT(e.lastName,' ',e.firstName) AS Employee_Name, table1.CA, table2.orderDate
+FROM table1
+INNER JOIN table2
+  ON table1.orderNumber=table2.orderNumber
+LEFT JOIN customers AS c
+  ON table2.customerNumber=c.customerNumber
+LEFT JOIN employees AS e
+  ON e.employeeNumber=c.salesRepEmployeeNumber
+ORDER BY table1.CA DESC;
+										</code></pre>
+									</div>
+								</div>
+							</div>
+							<a class="image"><img src="images/toys&cie_sale.png" alt="" data-position="center center" /></a>
+						</section>
+						<section class="sql">
+							<a class="image"><img src="images/toys&cie_finance.png" alt="" data-position="center center" /></a>
+							<div class="content">
+								<div class="inner">
+									<div class="tab">
+										<button class="tablinks" onclick="openTab(event, 'Finances')" id="defaultOpen">Finances</button>
+										<button class="tablinks" onclick="openTab(event, 'Unpaid')">Unpaid</button>
+									</div>
+
+									<!-- Tab content -->
+									<div id="Finances" class="tabcontent">
+										<pre><code>
+SELECT 
+  DATE_FORMAT(orders.orderdate, '%Y') AS Years,
+  DATE_FORMAT(orders.orderdate, '%M') AS Months,
+  country,
+  SUM(quantityOrdered * priceEach) AS TotalCommand
+FROM
+  orderdetails
+    INNER JOIN orders
+      ON orderdetails.orderNumber = orders.orderNumber
+    INNER JOIN customers
+      ON orders.customerNumber = customers.customerNumber
+WHERE status != 'Cancelled'
+GROUP BY country , Months , Years
+ORDER BY MONTH(orders.orderdate) , YEAR(orders.orderdate) DESC , TotalCommand DESC;
+										</code></pre>
+									</div>
+									<div id="Unpaid" class="tabcontent">
+										<pre><code>
+with CommandeTotale AS 
+  (SELECT orders.customerNumber, SUM(quantityOrdered*priceEach) AS TotalCommand
+  FROM orderdetails
+  INNER JOIN orders
+    ON orderdetails.orderNumber=orders.orderNumber
+  WHERE status != 'Cancelled'
+  GROUP BY customerNumber),
+CommandePaye AS
+  (SELECT p.customerNumber,c.customerName, sum(amount) AS TotalPaid 
+  FROM payments as p
+  INNER JOIN customers as c
+    ON p.customerNumber=c.customerNumber
+  GROUP BY customerNumber)
+SELECT
+  CommandePaye.customerNumber,
+  CommandePaye.customerName,
+  TotalCommand-TotalPaid AS ResteApayer
+FROM CommandePaye
+  INNER JOIN CommandeTotale
+    ON CommandePaye.customerNumber=CommandeTotale.customerNumber
+ORDER BY CommandePaye.customerNumber ASC;
+										</code></pre>
+									</div>
+								</div>
+							</div>
+						</section>
+						<section class="sql">
+							<div class="content">
+								<div class="inner">
+									<div class="tab">
+										<button class="tablinks" onclick="openTab(event, 'Most Orderer')" id="defaultOpen">Most Orderer</button>
+										<button class="tablinks" onclick="openTab(event, 'Logistic')">Logistic</button>
+									</div>
+
+									<!-- Tab content -->
+									<div id="Most Orderer" class="tabcontent">
+										<pre><code>
+SELECT 
+  p.productName,
+  SUM(quantityOrdered) AS Ordered,
+  p.quantityInStock AS Stock
+FROM
+  products AS p
+    INNER JOIN
+  orderdetails AS o ON p.productCode = o.productCode
+GROUP BY productName
+ORDER BY Ordered DESC
+LIMIT 5;
+										</code></pre>
+									</div>
+									<div id="Logistic" class="tabcontent">
+										<pre><code>
+SELECT 
+  ord.productCode,
+  p.productName,
+  p.quantityInStock AS Stock,
+  SUM(quantityOrdered) AS Ordered,
+  SUM(quantityOrdered * priceEach) AS CA,
+  o.orderDate
+FROM
+  orderdetails AS ord
+    INNER JOIN
+  products AS p ON ord.productCode = p.productCode
+    INNER JOIN
+  orders AS o ON ord.orderNumber = o.orderNumber
+GROUP BY productCode;
+										</code></pre>
+									</div>
+								</div>
+							</div>
+							<a class="image"><img src="images/toys&cie_logistic.png" alt="" data-position="center center" /></a>
+						</section>
+					</section>
+				
+				<!-- Two -->
+					<section id="two" class="wrapper style2 fullscreen fade-up">
+							<iframe id="movie_reco"
+								title="Movie Recommendation"
+								height="900" 
+								src="https://share.streamlit.io/pilouliz/movie_reco/main/app.py">
+							</iframe>
+					</section>
+
+				<!-- Three -->
+					<section id="three" class="wrapper style2 spotlights">
+						<section>
+							<a class="image"><img src="images/logoyogaandme.png" alt="" data-position="center center" /></a>
+							<div class="content">
+								<div class="inner">
+									<h2>Coming soon</h2>
+									<p>Construction of an internal strategic management tool, making it possible to cross-reference data in order to gain a better understanding of the activity of the studios and to give a global, monthly and weekly view that can be used and cross-referenced.</p>
+									<ul class="actions">
+										<li><a target="_blank" rel="noopener noreferrer" href="https://yogaandme.online/fr" class="button">Yoga&amp;Me</a></li>
+									</ul>
+								</div>
+							</div>
+						</section>
+					</section>
+
+			</div>
+
+		<!-- Footer -->
+			<footer id="footer" class="wrapper style1">
+				<div class="inner">
+					<ul class="menu">
+						<li><a target="_blank" rel="noopener noreferrer" href="https://github.com/alexislbh" class="icon brands fa-github"><span class="label">GitHub</span></a></li>
+						<li><a target="_blank" rel="noopener noreferrer" href="https://www.linkedin.com/in/alexislbh/" class="icon brands fa-linkedin-in"><span class="label">LinkedIn</span></a>
+						<li>Template Design: <a target="_blank" rel="noopener noreferrer" href="http://html5up.net">HTML5 UP</a></li>
+					</ul>
+				</div>
+			</footer>
+
+		<!-- Scripts -->
+			<script src="assets/js/jquery.min.js"></script>
+			<script src="assets/js/jquery.scrollex.min.js"></script>
+			<script src="assets/js/jquery.scrolly.min.js"></script>
+			<script src="assets/js/browser.min.js"></script>
+			<script src="assets/js/breakpoints.min.js"></script>
+			<script src="assets/js/util.js"></script>
+			<script src="assets/js/main.js"></script>
+
+	</body>
+</html>
